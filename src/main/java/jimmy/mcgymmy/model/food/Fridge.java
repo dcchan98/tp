@@ -4,11 +4,14 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jimmy.mcgymmy.commons.core.index.Index;
 import jimmy.mcgymmy.commons.util.CollectionUtil;
+import jimmy.mcgymmy.model.date.Date;
+import jimmy.mcgymmy.model.tag.Tag;
 
 /**
  * A list of food items that allows repeated elements and does not allow nulls.
@@ -16,8 +19,63 @@ import jimmy.mcgymmy.commons.util.CollectionUtil;
  */
 public class Fridge implements Iterable<Food> {
     private final ObservableList<Food> internalList = FXCollections.observableArrayList();
+    private final ObservableList<Food> filteredList = FXCollections.observableArrayList();
     private final ObservableList<Food> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
+    private Optional<Date> optFilterDate = Optional.empty();
+    private Optional<Tag> optFilterTag = Optional.empty();
+
+    public void setFilterDate(Date date) {
+        Optional<Date> optFilterDate = Optional.of(date);
+        this.optFilterDate = optFilterDate;
+    }
+
+    public void setFilterTag(Tag tag) {
+        Optional<Tag> optFilterTag = Optional.of(tag);
+        this.optFilterTag = optFilterTag;
+    }
+
+    /**
+     * filtering by parameters
+     */
+    public void filter() {
+        internalList.clear();
+        for (Food foodItem : internalList) {
+            filteredList.add(foodItem);
+        }
+        if (optFilterTag.isPresent()) {
+            filter(optFilterTag.get());
+        }
+        if (optFilterDate.isPresent()) {
+            filter(optFilterDate.get());
+        }
+    }
+
+    /**
+     * Filter filteredList with filterDate
+     *
+     * @param filterDate desired date to filter
+     */
+    public void filter(Date filterDate) {
+        for (Food currFood : internalList) {
+            if (currFood.getDate().equals(filterDate)) {
+                filteredList.add(currFood);
+            }
+        }
+    }
+
+    /**
+     * Filter filteredList with filterDate
+     *
+     * @param filterTag desired date to filter
+     */
+    public void filter(Tag filterTag) {
+        for (Food currFood : internalList) {
+            if (currFood.getTags().equals(filterTag)) {
+                filteredList.add(currFood);
+            }
+        }
+    }
 
     /**
      * Returns true if the list contains an equivalent food item as the given argument.
