@@ -13,7 +13,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import jimmy.mcgymmy.commons.core.GuiSettings;
-import jimmy.mcgymmy.model.food.NameContainsKeywordsPredicate;
+import jimmy.mcgymmy.logic.predicate.NameContainsKeywordsPredicate;
 import jimmy.mcgymmy.testutil.McGymmyBuilder;
 import jimmy.mcgymmy.testutil.TypicalFoods;
 

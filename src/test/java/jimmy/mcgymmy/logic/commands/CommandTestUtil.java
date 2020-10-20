@@ -10,10 +10,10 @@ import java.util.List;
 
 import jimmy.mcgymmy.commons.core.index.Index;
 import jimmy.mcgymmy.logic.commands.exceptions.CommandException;
+import jimmy.mcgymmy.logic.predicate.FoodContainsKeywordsPredicate;
 import jimmy.mcgymmy.model.McGymmy;
 import jimmy.mcgymmy.model.Model;
 import jimmy.mcgymmy.model.food.Food;
-import jimmy.mcgymmy.model.food.NameContainsKeywordsPredicate;
 
 /**
  * Contains helper methods for testing commands.
@@ -73,7 +73,7 @@ public class CommandTestUtil {
 
         Food food = model.getFilteredFoodList().get(targetIndex.getZeroBased());
         final String[] splitName = food.getName().fullName.split("\\s+");
-        model.updateFilteredFoodList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
+        model.updateFilteredFoodList(new FoodContainsKeywordsPredicate(Arrays.asList(splitName[0])));
         assertEquals(1, model.getFilteredFoodList().size());
     }
 

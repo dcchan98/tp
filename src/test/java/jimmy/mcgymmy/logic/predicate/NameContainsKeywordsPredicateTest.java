@@ -1,4 +1,4 @@
-package jimmy.mcgymmy.model.food;
+package jimmy.mcgymmy.logic.predicate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import jimmy.mcgymmy.model.food.Name;
 import jimmy.mcgymmy.testutil.FoodBuilder;
 
 public class NameContainsKeywordsPredicateTest {

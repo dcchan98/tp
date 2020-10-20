@@ -2,8 +2,10 @@ package jimmy.mcgymmy.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +15,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
 import jimmy.mcgymmy.commons.core.index.Index;
+import jimmy.mcgymmy.commons.util.FileUtil;
 import jimmy.mcgymmy.commons.util.StringUtil;
 import jimmy.mcgymmy.logic.parser.exceptions.ParseException;
 import jimmy.mcgymmy.model.date.Date;
@@ -121,10 +124,11 @@ public class ParserUtil {
     public static Tag parseTag(String tag) throws ParseException {
         requireNonNull(tag);
         String trimmedTag = tag.trim();
-        if (!Tag.isValidTagName(trimmedTag)) {
-            throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+        try {
+            return new Tag(trimmedTag);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage());
         }
-        return new Tag(trimmedTag);
     }
 
     /**
@@ -137,6 +141,61 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String filepath} into an {@code File}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code filepath} is invalid.
+     */
+    public static Path parseFile(String filepath) throws ParseException {
+
+        //If filepath is invalid or does not exist throw an exception
+        if (!FileUtil.isValidPath(filepath)) {
+            throw new ParseException(String.format("Invalid Filepath %s", filepath));
+        }
+
+        if (!FileUtil.isFileExists(Path.of(filepath))) {
+            throw new ParseException(String.format("File at %s does not exist", filepath));
+        }
+
+        //Return Path object of file
+        return Path.of(filepath);
+    }
+
+    /**
+     * Parses {@Code String directory} into a {@code File}.
+     *
+     * @param directory Directory to store the file.
+     * @return Path containing directoryPath.
+     * @throws ParseException if directory does not exist.
+     */
+    public static Path parseDir(String directory) throws ParseException {
+        //Create the directory
+        Path path = Path.of(directory);
+        File file = new File(directory);
+        if (!file.exists()) {
+            throw new ParseException(String.format("Directory does not exist %s", path.toString()));
+        }
+        return path;
+    }
+
+    /**
+     * Parse {@code String outputName} into a {@code String}.
+     *
+     * @param outputPath Name to save the output file.
+     * @return outputPath as string.
+     * @throws ParseException when outputPath is empty.
+     */
+    public static String parseOutputName(String outputPath) throws ParseException {
+        if (outputPath.trim().equals("")) {
+            throw new ParseException("Filename cannot be empty");
+        }
+        if (!outputPath.contains(".json")) {
+            outputPath += ".json";
+        }
+        return outputPath;
     }
 
     /**

@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import jimmy.mcgymmy.commons.core.Messages;
 import jimmy.mcgymmy.logic.parser.CommandParserTestUtil;
+import jimmy.mcgymmy.logic.predicate.FoodContainsKeywordsPredicate;
 import jimmy.mcgymmy.model.Model;
 import jimmy.mcgymmy.model.ModelManager;
 import jimmy.mcgymmy.model.UserPrefs;
-import jimmy.mcgymmy.model.food.NameContainsKeywordsPredicate;
 import jimmy.mcgymmy.testutil.TypicalFoods;
 
 /**
@@ -27,7 +27,7 @@ public class FindCommandTest {
     @Test
     public void execute_zeroKeywords_noFoodFound() {
         String expectedMessage = String.format(Messages.MESSAGE_FOOD_LISTED_OVERVIEW, 0);
-        NameContainsKeywordsPredicate predicate = preparePredicate(" ");
+        FoodContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand();
         command.setParameters(new CommandParserTestUtil.ParameterStub<>("", predicate));
         expectedModel.updateFilteredFoodList(predicate);
@@ -38,7 +38,7 @@ public class FindCommandTest {
     @Test
     public void execute_multipleKeywords_multipleFoodsFound() {
         String expectedMessage = String.format(Messages.MESSAGE_FOOD_LISTED_OVERVIEW, 2);
-        NameContainsKeywordsPredicate predicate = preparePredicate("CHICKEN fish");
+        FoodContainsKeywordsPredicate predicate = preparePredicate("CHICKEN fish");
         FindCommand command = new FindCommand();
         command.setParameters(new CommandParserTestUtil.ParameterStub<>("", predicate));
         expectedModel.updateFilteredFoodList(predicate);
@@ -48,9 +48,9 @@ public class FindCommandTest {
     }
 
     /**
-     * Parses {@code userInput} into a {@code NameContainsKeywordsPredicate}.
+     * Parses {@code userInput} into a {@code FoodContainsKeywordsPredicate}.
      */
-    private NameContainsKeywordsPredicate preparePredicate(String userInput) {
-        return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    private FoodContainsKeywordsPredicate preparePredicate(String userInput) {
+        return new FoodContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
     }
 }
